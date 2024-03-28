@@ -1,18 +1,18 @@
 import express from "express";
 import { checkSchema } from "express-validator";
 import * as NotesController from "../controllers/notes.controller";
-import * as NoteValidations from "../validators/notesValidator";
+import * as NoteSchema from "../validators/notesValidator";
 
 const router = express.Router();
 
-router.get("/", checkSchema(NoteValidations.createNoteValidationSchema), NotesController.getNotes);
+router.get("/", NotesController.getNotes);
 
-// router.get("/:id", NotesController.findNote);
+router.get("/:id", checkSchema(NoteSchema.findDeleteNoteValidationSchema), NotesController.findNote);
 
 router.post("/", NotesController.addNotes);
 
-// router.delete("/:id", NotesController.deleteNotes);
+router.delete("/:id", checkSchema(NoteSchema.findDeleteNoteValidationSchema), NotesController.deleteNotes);
 
-// router.patch("/:id", NotesController.updateNotes);
+router.patch("/:id", checkSchema(NoteSchema.updateNoteValidationSchema), NotesController.updateNotes);
 
 export default router;

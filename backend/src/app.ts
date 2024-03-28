@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
 import notesRoutes from "./routes/notes.route";
@@ -16,10 +16,13 @@ app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));
 });
 
-app.use((error: unknown, _req: Request, res: Response) => {
+// eslint-disable-next-line no-unused-vars
+app.use((error: unknown, _req: Request, res: Response, next: NextFunction) => {
   console.error(error);
   let errorMessage = "Internal Server Error";
   let statusCode = 500;
+  console.log(isHttpError(error));
+
   if (isHttpError(error)) {
     statusCode = error.status;
     errorMessage = error.message;
